@@ -1,19 +1,13 @@
 import { useState } from "react";
-import { Button, StyleSheet, TextInput, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 
 import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
-  const [goalText, setGoalText] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
 
-  const goalInputHandler = (enteredText) => {
-    setGoalText(enteredText);
-  };
-
-  const addGoalHandler = () => {
-    setGoalText("");
-
+  const addGoalHandler = (goalText) => {
     // the recommended way of updating state when the new state depends on the old state
     // pass in a function to the setState function
     setCourseGoals((currGoals) => [
@@ -24,20 +18,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="your goal..."
-          style={styles.textInput}
-          // target action pair. Pass a pointer to the function
-          onChangeText={goalInputHandler}
-          value={goalText}
-          maxLength={25}
-          autoCorrect="off"
-          autoComplete="off"
-        />
-        {/* buttons do not have a style prop */}
-        <Button title="add goal" onPress={addGoalHandler} />
-      </View>
+      <GoalInput buttonPressHandler={addGoalHandler} />
       <View style={styles.goalsContainer}>
         <FlatList
           // every object in here has a key property, FlatList automatically looks for that and uses that Key
@@ -58,24 +39,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
-  },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 10,
-    margingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    // take up 80% of the available width
-    width: "70%",
-    marginRight: 8,
-    padding: 8,
   },
   goalsContainer: {
     flex: 8,
