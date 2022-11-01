@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, TextInput, View, FlatList } from "react-native";
+
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [goalText, setGoalText] = useState("");
@@ -10,17 +12,14 @@ export default function App() {
   };
 
   const addGoalHandler = () => {
-    console.log(goalText);
     setGoalText("");
 
     // the recommended way of updating state when the new state depends on the old state
     // pass in a function to the setState function
-    setCourseGoals((currGoals) => [...currGoals, goalText]);
-  };
-
-  const getCurrentTime = () => {
-    let currentDate = new Date().toJSON().slice(0, 10);
-    return currentDate;
+    setCourseGoals((currGoals) => [
+      ...currGoals,
+      { text: goalText, key: Math.random().toString() },
+    ]);
   };
 
   return (
@@ -40,15 +39,14 @@ export default function App() {
         <Button title="add goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        {/* TODO: Add a time-stamp to the right of the text container that displays the time the goal was added */}
-        {courseGoals.map((goal) => (
-          <View style={styles.goalContainer}>
-            <Text key={goal} style={styles.goalText}>
-              {goal}
-            </Text>
-            <Text style={styles.goalText}>{getCurrentTime()}</Text>
-          </View>
-        ))}
+        <FlatList
+          // every object in here has a key property, FlatList automatically looks for that and uses that Key
+          data={courseGoals}
+          renderItem={(itemData) => {
+            // console.log(itemData.item.text);
+            return <GoalItem text={itemData.item.text} />;
+          }}
+        />
       </View>
     </View>
   );
@@ -82,21 +80,5 @@ const styles = StyleSheet.create({
   goalsContainer: {
     flex: 8,
     marginTop: 10,
-  },
-  goalContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 5,
-    width: "100%",
-    borderWidth: 1,
-    borderRadius: 7,
-    backgroundColor: "#9C1E98",
-    borderColor: "#9C1E98",
-    marginBottom: 6,
-    height: 40,
-  },
-  goalText: {
-    color: "#ffffff",
   },
 });
