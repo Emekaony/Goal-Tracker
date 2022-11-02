@@ -12,8 +12,17 @@ export default function App() {
     // pass in a function to the setState function
     setCourseGoals((currGoals) => [
       ...currGoals,
-      { text: goalText, key: Math.random().toString() },
+      // switched this from key to ID so I can make use of the KeyExtractor function
+      { text: goalText, id: Math.random().toString() },
     ]);
+  };
+
+  const deleteGoalHandler = (id) => {
+    console.log("Item has been deleted!");
+    setCourseGoals((currState) => {
+      // keep all goals except the one we wan to delete - the one that matches the id
+      return currState.filter((goal) => goal.id !== id);
+    });
   };
 
   return (
@@ -25,7 +34,16 @@ export default function App() {
           data={courseGoals}
           renderItem={(itemData) => {
             // console.log(itemData.item.text);
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                text={itemData.item.text}
+                onDeleteItem={deleteGoalHandler}
+                id={itemData.item.id}
+              />
+            );
+          }}
+          keyExtractor={(item) => {
+            return item.id;
           }}
         />
       </View>

@@ -1,14 +1,17 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 
 import { getCurrentTime } from "../utils/timeUtils";
 
 // forgot that props show up as the first argument;
 const GoalItem = (props) => {
   return (
-    <View style={styles.goalContainer}>
-      <Text style={styles.goalText}>{props.text}</Text>
-      <Text style={styles.goalText}>{getCurrentTime()}</Text>
-    </View>
+    // look into the bind and how it solved the problem of passing ID thorugh props
+    <Pressable onPress={props.onDeleteItem.bind(this, props.id)}>
+      <View style={styles.goalContainer}>
+        <Text style={styles.goalText}>{props.text}</Text>
+        <Text style={styles.goalText}>{getCurrentTime()}</Text>
+      </View>
+    </Pressable>
   );
 };
 
