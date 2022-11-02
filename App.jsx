@@ -1,11 +1,17 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
 export default function App() {
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const [courseGoals, setCourseGoals] = useState([]);
+
+  const startAddGoalHandler = () => {
+    setModalIsVisible(true);
+  };
 
   const addGoalHandler = (goalText) => {
     // the recommended way of updating state when the new state depends on the old state
@@ -15,6 +21,7 @@ export default function App() {
       // switched this from key to ID so I can make use of the KeyExtractor function
       { text: goalText, id: Math.random().toString() },
     ]);
+    endAddGoalHandler();
   };
 
   const deleteGoalHandler = (id) => {
@@ -25,29 +32,45 @@ export default function App() {
     });
   };
 
+  const endAddGoalHandler = () => {
+    setModalIsVisible(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <GoalInput buttonPressHandler={addGoalHandler} />
-      <View style={styles.goalsContainer}>
-        <FlatList
-          // every object in here has a key property, FlatList automatically looks for that and uses that Key
-          data={courseGoals}
-          renderItem={(itemData) => {
-            // console.log(itemData.item.text);
-            return (
-              <GoalItem
-                text={itemData.item.text}
-                onDeleteItem={deleteGoalHandler}
-                id={itemData.item.id}
-              />
-            );
-          }}
-          keyExtractor={(item) => {
-            return item.id;
-          }}
+    <>
+      <StatusBar style="light" />
+      <View style={styles.container}>
+        <Button
+          title="Add new goal"
+          color="#9D6ADF"
+          onPress={startAddGoalHandler}
         />
+        <GoalInput
+          buttonPressHandler={addGoalHandler}
+          visible={modalIsVisible}
+          onCancel={endAddGoalHandler}
+        />
+        <View style={styles.goalsContainer}>
+          <FlatList
+            // every object in here has a key property, FlatList automatically looks for that and uses that Key
+            data={courseGoals}
+            renderItem={(itemData) => {
+              // console.log(itemData.item.text);
+              return (
+                <GoalItem
+                  text={itemData.item.text}
+                  onDeleteItem={deleteGoalHandler}
+                  id={itemData.item.id}
+                />
+              );
+            }}
+            keyExtractor={(item) => {
+              return item.id;
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 

@@ -5,13 +5,20 @@ import { getCurrentTime } from "../utils/timeUtils";
 // forgot that props show up as the first argument;
 const GoalItem = (props) => {
   return (
-    // look into the bind and how it solved the problem of passing ID thorugh props
-    <Pressable onPress={props.onDeleteItem.bind(this, props.id)}>
-      <View style={styles.goalContainer}>
+    <View>
+      <Pressable
+        style={({ pressed }) => {
+          return pressed
+            ? { ...styles.goalContainer, ...styles.pressedItem }
+            : { ...styles.goalContainer };
+        }}
+        // look into the bind and how it solved the problem of passing ID thorugh props
+        onPress={props.onDeleteItem.bind(this, props.id)}
+      >
         <Text style={styles.goalText}>{props.text}</Text>
         <Text style={styles.goalText}>{getCurrentTime()}</Text>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 };
 
@@ -20,17 +27,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 5,
     width: "100%",
     borderWidth: 1,
     borderRadius: 7,
-    backgroundColor: "#9C1E98",
-    borderColor: "#9C1E98",
-    marginBottom: 6,
+    backgroundColor: "#5e0acc",
+    borderColor: "#5e0acc",
     height: 40,
+    marginBottom: 8,
+  },
+  pressedItem: {
+    opacity: 0.8,
   },
   goalText: {
     color: "#ffffff",
+    padding: 8,
   },
 });
 
