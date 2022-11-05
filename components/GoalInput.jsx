@@ -6,6 +6,10 @@ import {
   TextInput,
   Modal,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 const GoalInput = ({ buttonPressHandler, visible, onCancel }) => {
@@ -24,39 +28,51 @@ const GoalInput = ({ buttonPressHandler, visible, onCancel }) => {
 
   return (
     <Modal animationType="slide" visible={visible}>
-      {/* make sure to use a nested view like you see here when styling modals */}
-      <View style={styles.inputContainer}>
-        <Image
-          source={require("../assets/images/goal_image.png")}
-          style={styles.image}
-        />
-        <TextInput
-          placeholder="your goal..."
-          placeholderTextColor={"white"}
-          pl
-          style={styles.textInput}
-          // target action pair. Pass a pointer to the function
-          onChangeText={goalInputHandler}
-          // this is called two-way binding
-          value={goalText}
-          maxLength={25}
-          autoCorrect="off"
-          autoComplete="off"
-        />
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button title="Cancel" onPress={onCancel} color="#f31282" />
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inputContainer}>
+            <Image
+              source={require("../assets/images/goal_image.png")}
+              style={styles.image}
+            />
+            <TextInput
+              placeholder="your goal..."
+              placeholderTextColor={"white"}
+              pl
+              style={styles.textInput}
+              // target action pair. Pass a pointer to the function
+              onChangeText={goalInputHandler}
+              // this is called two-way binding
+              value={goalText}
+              maxLength={25}
+              autoComplete="off"
+            />
+            <View style={styles.buttonContainer}>
+              <View style={styles.button}>
+                <Button title="Cancel" onPress={onCancel} color="#f31282" />
+              </View>
+              <View style={styles.button}>
+                <Button
+                  title="Add Goal"
+                  onPress={addGoalHandler}
+                  color="white"
+                />
+              </View>
+            </View>
           </View>
-          <View style={styles.button}>
-            <Button title="Add Goal" onPress={addGoalHandler} color="white" />
-          </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   inputContainer: {
     flex: 1,
     justifyContent: "center",
