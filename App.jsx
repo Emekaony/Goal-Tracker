@@ -5,6 +5,16 @@ import { StatusBar } from "expo-status-bar";
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
+/*
+
+TODO:
+1. Add motivation for why the goal is being added
+2. Add due dates for the goal to be completed 
+3. Make the UI for these two additions be responsive using FlexBox then move on to a new section
+4. Learn how to use AsyncStorage to persist reloads
+
+*/
+
 export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [courseGoals, setCourseGoals] = useState([]);
