@@ -10,19 +10,26 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  Text,
 } from "react-native";
 
 const GoalInput = ({ buttonPressHandler, visible, onCancel }) => {
   const [goalText, setGoalText] = useState("");
+  const [motivation, setMotivation] = useState("");
 
   const goalInputHandler = (enteredText) => {
     setGoalText(enteredText);
+  };
+
+  const motivationHandler = (motivation) => {
+    setMotivation(motivation);
   };
 
   // using this as an intermediate function so that passing state from one file to another is achieved
   // context & Redux will be studied later which will make app-wide state management much easier
   const addGoalHandler = () => {
     setGoalText("");
+    setMotivation("");
     buttonPressHandler(goalText);
   };
 
@@ -38,17 +45,35 @@ const GoalInput = ({ buttonPressHandler, visible, onCancel }) => {
               source={require("../assets/images/goal_image.png")}
               style={styles.image}
             />
+            <View style={styles.baseTopText}>
+              <Text style={{ color: "white" }}>Goal</Text>
+            </View>
             <TextInput
-              placeholder="your goal..."
-              placeholderTextColor={"white"}
-              pl
-              style={styles.textInput}
+              selectionColor={"#1D1818"}
+              style={styles.baseTextInput}
               // target action pair. Pass a pointer to the function
               onChangeText={goalInputHandler}
               // this is called two-way binding
               value={goalText}
-              maxLength={25}
+              multiline={true}
+              maxLength={100}
               autoComplete="off"
+            />
+            <View style={{ ...styles.baseTopText, marginTop: 10 }}>
+              <Text style={{ color: "white" }}>Motivation</Text>
+            </View>
+            <TextInput
+              selectionColor={"#1D1818"}
+              style={{
+                ...styles.baseTextInput,
+                height: "auto",
+                textAlign: "left",
+              }}
+              onChangeText={motivationHandler}
+              value={motivation}
+              autoComplete="off"
+              multiline={true}
+              numberOfLines={10}
             />
             <View style={styles.buttonContainer}>
               <View style={styles.button}>
@@ -85,15 +110,21 @@ const styles = StyleSheet.create({
     height: 100,
     margin: 20,
   },
-  textInput: {
+  baseTopText: {
+    width: "100%",
+    height: 20,
+    justifyContent: "flex-start",
+  },
+  baseTextInput: {
     borderWidth: 1,
     width: "100%",
-    padding: 8,
     borderColor: "#C0B9CA",
     backgroundColor: "#C0B9CA",
-    color: "#120438",
+    color: "#1D1818",
     borderRadius: 6,
-    padding: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
   },
   buttonContainer: {
     flexDirection: "row",
